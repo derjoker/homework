@@ -3,17 +3,17 @@ Template
 
 ## Mo. 0407
 
-### 原文听写
+### 听写
 
 Früher wurde Müll in Deutschland einfach auf einer Müllkippe ins Feuer geworfen oder vergraben. Dann kamen die ersten Gesetze zur Mülltrennung. Heute ist das Recycling ein Milliardengeschäft.
 
-### 参考译文
+### 翻译
 
 早先，德国的垃圾只会成堆火烧或者掩埋处理。之后有了第一部垃圾分类的法律。现在垃圾回收已经是一个亿万的大生意。
 
 * Müll­kip­pe, die: Platz zum Abladen und Lagern von Müll, Mülldeponie; Kurzform: Kippe (1b)
 
-### 翻译练习
+### 练习
 
 1.
 * 去年的狂欢节在年轻人中很受欢迎（der Karneval.    bei + D beliebt sind）
