@@ -24,3 +24,12 @@ body {
 .status-close {
   background-color: grey;
 }
+
+img.logo {
+  width: 50px;
+  border-color: black;
+  border-width: thin;
+  border-style: solid;
+  border-radius: 50%;
+  background-color: white;
+}
