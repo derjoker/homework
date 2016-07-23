@@ -1,0 +1,26 @@
+
+body {
+  margin-top: 50px;
+  text-align: center;
+}
+
+#twitch-box {
+  width: 450px;
+  margin: auto;
+}
+
+.twitch-head {
+  color: purple;
+}
+
+.status-online {
+  background-color: green;
+}
+
+.status-offline {
+  background-color: blue;
+}
+
+.status-close {
+  background-color: grey;
+}
