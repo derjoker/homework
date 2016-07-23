@@ -16,7 +16,8 @@ $(document).ready(function() {
         channel_query = 'https://api.twitch.tv/kraken/channels/' + channel;
 
     var status,
-        logo = 'http://www.freeiconspng.com/uploads/profile-icon-9.png',
+        // twitch 404 user
+        logo = 'https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_150x150.png',
         href = '#',
         name = channel,
         detail;
