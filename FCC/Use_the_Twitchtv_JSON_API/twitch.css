@@ -5,12 +5,20 @@ body {
 }
 
 #twitch-box {
-  width: 450px;
+  width: 600px;
   margin: auto;
 }
 
 .twitch-head {
   color: purple;
+}
+
+div.display {
+  width: 200px;
+}
+
+div.detail {
+  width: 400px;
 }
 
 .status-online {
