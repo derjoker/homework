@@ -1,0 +1,54 @@
+
+body {
+  padding-top: 30px;
+  padding-bottom: 20px;
+  background-color: red;
+}
+
+h1 {
+  text-align: center;
+}
+
+div.quote-box {
+  width: 500px;
+  margin: auto;
+  padding: 20px;
+  background-color: white;
+}
+
+div.quote-text {
+  text-align: center;
+  font-size: 25px;
+  top: 50%;
+}
+
+div.quote-text i {
+  font-size: 30px;
+}
+
+div.quote-action {
+  border: 1px solid black;
+  padding: 15px;
+}
+
+div.quote-action i {
+  text-align: left;
+  color: red;
+}
+
+div.quote-action button {
+  float: right;
+  font-size: 16px;
+  padding: 6px;
+  border: none;
+  border-radius: 3px;
+  background-color: red;
+}
+
+div.info {
+  text-align: center;
+}
+
+div.backend {
+  display: none;
+}
