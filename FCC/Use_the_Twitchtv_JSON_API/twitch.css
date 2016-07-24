@@ -1,36 +1,41 @@
 
 body {
   margin-top: 50px;
+  margin-bottom: 30px;
   text-align: center;
 }
 
-#twitch-box {
-  width: 600px;
-  margin: auto;
+.container {
+  max-width: 600px;
+}
+
+.row {
+  border: thin white solid;
+  padding: 15px;
 }
 
 .twitch-head {
   color: purple;
 }
 
-div.display {
-  width: 200px;
-}
-
-div.detail {
-  width: 400px;
-}
-
 .status-online {
-  background-color: green;
+  background-color: darkseagreen;
 }
 
 .status-offline {
-  background-color: blue;
+  background-color: steelblue;
 }
 
 .status-close {
-  background-color: grey;
+  background-color: silver;
+}
+
+a {
+  color: purple;
+}
+
+a[href="#"] {
+  pointer-events: none;
 }
 
 img.logo {
