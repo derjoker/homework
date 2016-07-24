@@ -19,7 +19,6 @@ div.quote-box {
 div.quote-text {
   text-align: center;
   font-size: 25px;
-  top: 50%;
 }
 
 div.quote-text i {
@@ -38,8 +37,9 @@ div.quote-action i {
 
 div.quote-action button {
   float: right;
-  font-size: 16px;
-  padding: 6px;
+  font-size: 1em;
+  padding: 10px;
+  margin: 5px;
   border: none;
   border-radius: 3px;
   background-color: red;
