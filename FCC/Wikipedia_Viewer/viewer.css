@@ -1,0 +1,29 @@
+
+input:focus {
+  outline: none;
+}
+
+input {
+  border: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+body {
+  margin-top: 100px;
+}
+
+div#wikiviewer {
+  width: 60%;
+  margin: auto;
+}
+
+span#search-box {
+  border: thin black solid;
+}
+
+div.title {
+  font-weight: bold;
+}
