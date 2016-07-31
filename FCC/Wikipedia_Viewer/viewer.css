@@ -3,25 +3,56 @@ input:focus {
   outline: none;
 }
 
-input {
-  border: none;
-}
-
 a {
   text-decoration: none;
 }
 
+a:link,
+a:visited {
+  color: black;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 body {
   margin-top: 100px;
+  background-color: lightseagreen;
+  text-align: center;
 }
 
 div#wikiviewer {
   width: 60%;
   margin: auto;
+  font-size: 20px;
+}
+
+div#searchbox {
+  margin: 8px;
 }
 
 span#search-box {
+  padding: 5px;
   border: thin black solid;
+  background-color: white;
+}
+
+input {
+  border: none;
+  font-size: 18px;
+}
+
+#outbox {
+  font-size: 18px;
+  margin: 30px;
+}
+
+.item {
+  padding: 20px;
+  margin: 10px;
+  background-color: white;
+  text-align: left;
 }
 
 div.title {
