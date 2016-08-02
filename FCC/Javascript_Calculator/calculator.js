@@ -11,13 +11,14 @@ $(document).ready(function() {
 
   var entry = '0', expression = [];
 
+  var buildExpression = function() {
+    if (expression.length === 0) return '0';
+    return expression.join('');
+  };
+
   var updateScreen = function() {
     $('div#entry').text(entry);
-    if (expression.length === 0) {
-      $('div#expression').text('0');
-    } else {
-      $('div#expression').text(expression.join(''));
-    }
+    $('div#expression').text(buildExpression());
   };
 
   var clearAll = function() {
@@ -31,7 +32,9 @@ $(document).ready(function() {
   };
 
   var calculate = function() {
-    entry = eval($('div#expression').text()).toString();
+    console.log(buildExpression());
+    entry = eval(buildExpression()).toString();
+    expression.push('=');
     expression.push(entry);
   };
 
@@ -97,9 +100,8 @@ $(document).ready(function() {
         }
       }
 
-      expression.push(entry);
-
       if ('=' === input) calculate();
+      else expression.push(entry);
     }
 
     console.log(expression);
