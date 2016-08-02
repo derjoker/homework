@@ -32,7 +32,7 @@ $(document).ready(function() {
   };
 
   var calculate = function() {
-    console.log(buildExpression());
+    // console.log(buildExpression());
     entry = eval(buildExpression()).toString();
     expression.push('=');
     expression.push(entry);
@@ -104,7 +104,7 @@ $(document).ready(function() {
       else expression.push(entry);
     }
 
-    console.log(expression);
+    // console.log(expression);
 
     updateScreen();
     if ('=' === input) expression = [];
