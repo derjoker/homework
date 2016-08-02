@@ -16,14 +16,20 @@ div#screen {
   text-align: right;
   margin: 10px;
   padding: 10px;
+  white-space: nowrap;
+  display: block;
+  overflow: hidden;
+  text-overflow: clip;
 }
 
 div#entry {
   font-size: 40px;
+  direction: rtl;
 }
 
 div#expression {
   font-size: 20px;
+  direction: ltr;
 }
 
 button {
