@@ -19,17 +19,17 @@ div#screen {
   white-space: nowrap;
   display: block;
   overflow: hidden;
-  text-overflow: clip;
+  /*text-overflow: ellipsis;*/
 }
 
 div#entry {
   font-size: 40px;
-  direction: rtl;
+  /*direction: rtl;*/
 }
 
 div#expression {
   font-size: 20px;
-  direction: ltr;
+  /*direction: ltr;*/
 }
 
 button {
