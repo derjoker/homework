@@ -110,18 +110,27 @@ $(document).ready(function() {
 
   updateBoard();
 
-  // setup player
-  var piece = 'X', autopiece = 'O';
-  var player = Player(piece), autoplayer = AutoPlayer(autopiece);
+  $('dialog button').click(function() {
+    // setup player
+    var piece = $(this).text(),
+        autopiece = piece === pieces[0] ? pieces[1] : pieces[0];
+    var player = Player(piece),
+        autoplayer = AutoPlayer(autopiece);
 
-  // autoplayer.play(_.sample(_.range(9)));
-  // updateBoard();
+    document.getElementById('config').close();
 
-  $('div.cell').click(function() {
-    if (!gameOver() && player.play($(this).index())) {
+    // X plays first.
+    if (pieces[0] === autopiece) {
+      autoplayer.play(_.sample(_.range(9)));
       updateBoard();
-      if (autoplayer.play()) updateBoard();
     }
+
+    $('div.cell').click(function() {
+      if (!gameOver() && player.play($(this).index())) {
+        updateBoard();
+        if (autoplayer.play()) updateBoard();
+      }
+    });
   });
 
 });

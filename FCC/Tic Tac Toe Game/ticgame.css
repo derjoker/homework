@@ -3,6 +3,31 @@ body {
   margin-top: 80px;
 }
 
+dialog {
+  width: 240px;
+  margin: 60px auto;
+  border-radius: 10px;
+  box-shadow: 2px 2px 2px 1px lightgray;
+  text-align: center;
+  font-size: 24px;
+}
+
+dialog button {
+  border: thin black solid;
+  background-color: white;
+  outline: none;
+  cursor: pointer;
+  width: 40px;
+  font-size: 24px;
+  padding: 5px 10px;
+  margin: 0px 5px;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: lightgray;
+}
+
 div#ticboard {
   border: 2px black solid;
   width: 360px;
