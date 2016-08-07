@@ -43,3 +43,7 @@ div.cell {
   text-align: center;
   font-size: 30px;
 }
+
+div.highlight {
+  color: red;
+}

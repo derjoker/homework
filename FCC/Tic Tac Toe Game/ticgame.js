@@ -64,8 +64,8 @@ var Board = function() {
           return piece === board[val];
         })) {
           console.log(piece + ' wins.');
-          line.forEach(function() {
-            // [todo] circle
+          line.forEach(function(val) {
+            $('div.cell').eq(val).addClass('highlight');
           });
           return true;
         }
