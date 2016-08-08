@@ -10,46 +10,50 @@ var playsFirst = function(piece) {
   return Pieces[0] === piece;
 };
 
+var InitBoardValue = 0;
+
+var checkarr = [
+  [0,1,2], [3,4,5], [6,7,8],
+  [0,3,6], [1,4,7], [2,5,8],
+  [0,4,8], [2,4,6]
+];
+
+var checker = checkarr.reduce(function(prev, curr) {
+  curr.forEach(function(val) {
+    if (prev.hasOwnProperty(val)) prev[val].push(curr);
+    else prev[val] = [curr];
+  });
+  return prev;
+}, {});
+
 var Board = function() {
-  var _board, InitBoardValue = 0;
-  var checkarr = [
-    [0,1,2], [3,4,5], [6,7,8],
-    [0,3,6], [1,4,7], [2,5,8],
-    [0,4,8], [2,4,6]
-  ];
-  var checker = checkarr.reduce(function(prev, curr) {
-    curr.forEach(function(val) {
-      if (prev.hasOwnProperty(val)) prev[val].push(curr);
-      else prev[val] = [curr];
-    });
-    return prev;
-  }, {});
+  var _bdArray;
 
   return {
-    init: function(board) {
-      if (board === undefined || !Array.isArray(board)) _board = Array(9).fill(InitBoardValue);
-      else _board = _.clone(board);
+    init: function(bdArray) {
+      if (bdArray === undefined || !Array.isArray(bdArray)) _bdArray = Array(9).fill(InitBoardValue);
+      else _bdArray = _.clone(bdArray);
     },
     build: function() {
       $('div#ticboard').html('');
-      for (var i = 0; i < _board.length; ++i) {
+      for (var i = 0; i < _bdArray.length; ++i) {
         $('div#ticboard').append($('<div>', {'class': 'cell'}));
       }
       $('div#ticboard').append($('<div>').css({'clear': 'both'}));
     },
     update: function() {
-      _board.forEach(function(val, index) {
+      _bdArray.forEach(function(val, index) {
         if (InitBoardValue !== val) $('div.cell').eq(index).html(val);
       });
     },
     positions: function() {
-      return _board.filter(function(val) {
+      return _bdArray.filter(function(val) {
         return InitBoardValue === val;
       });
     },
     taken: function(place) {
       if (place === undefined) {
-        if (_board.every(function(val) {
+        if (_bdArray.every(function(val) {
           return val !== InitBoardValue;
         })) {
           console.log('it\'s a tie.');
@@ -57,15 +61,15 @@ var Board = function() {
         }
         return false;
       }
-      if (_board[place] === undefined) return true; // index out of range
-      return _board[place] !== InitBoardValue;
+      if (_bdArray[place] === undefined) return true; // index out of range
+      return _bdArray[place] !== InitBoardValue;
     },
     weigh: function(place, piece) {
       if (this.taken(place)) return -1;
       var win = [], lose = [];
       var weights = checker[place].map(function(line) {
         var cnt = _.countBy(line.map(function(val) {
-          return _board[val];
+          return _bdArray[val];
         }));
         var weight = 0;
         if (cnt[InitBoardValue] === 3) weight += 1;
@@ -90,7 +94,7 @@ var Board = function() {
     check: function(piece) {
       return checkarr.some(function(line) {
         if (line.every(function(val) {
-          return piece === _board[val];
+          return piece === _bdArray[val];
         })) {
           console.log(piece + ' wins.');
           line.forEach(function(val) {
@@ -102,7 +106,7 @@ var Board = function() {
       });
     },
     play: function(piece, place) {
-      _board[place] = piece;
+      _bdArray[place] = piece;
       this.update();
     }
   };
