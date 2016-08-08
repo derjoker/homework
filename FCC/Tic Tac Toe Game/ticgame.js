@@ -1,15 +1,13 @@
 
-var Piece = function(piece) {
-  var _pieces = ['X', 'O'], _piece = _pieces[0];
-  if (_pieces[1] === piece) _piece = _pieces[1];
-  return {
-    get: function() {
-      return _piece;
-    },
-    opponent: function() {
-      return _pieces[0] === _piece ? _pieces[1] : _pieces[0];
-    }
-  };
+var Pieces = ['X', 'O'];
+
+var getOpponent = function(piece) {
+  return Pieces[0] === piece ? Pieces[1] : Pieces[0];
+};
+
+// 'X' plays first
+var playsFirst = function(piece) {
+  return Pieces[0] === piece;
 };
 
 var Board = function() {
@@ -137,7 +135,6 @@ var Gamer = function(piece, board) {
 
 var Game = function() {
   var board = Board(),
-      pieces = ['X', 'O'],
       _gamerPiece, _aiPiece,
       gamer, ai;
 
@@ -147,16 +144,14 @@ var Game = function() {
       board.build();
     },
     setup: function(gamerPiece) {
-      var piece = Piece(gamerPiece);
-      _gamerPiece = piece.get();
-      _aiPiece = piece.opponent();
+      _gamerPiece = gamerPiece;
+      _aiPiece = getOpponent(gamerPiece);
 
       gamer = Gamer(_gamerPiece, board);
       ai = Gamer(_aiPiece, board);
     },
     start: function() {
-      // 'X' plays first
-      if (pieces[0] === _aiPiece) ai.play();
+      if (playsFirst(_aiPiece)) ai.play();
 
       var self = this;
       $('div.cell').on('click', function() {
@@ -166,7 +161,7 @@ var Game = function() {
     over: function() {
       var ret = false;
 
-      if (pieces.some(function(piece) {
+      if (Pieces.some(function(piece) {
         return board.check(piece);
       })) {
         ret = true;
