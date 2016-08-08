@@ -27,33 +27,33 @@ var checker = checkarr.reduce(function(prev, curr) {
 }, {});
 
 var Board = function() {
-  var _bdArray;
+  var bdArray;
 
   return {
-    init: function(bdArray) {
-      if (bdArray === undefined || !Array.isArray(bdArray)) _bdArray = Array(9).fill(InitBoardValue);
-      else _bdArray = _.clone(bdArray);
+    init: function(arr) {
+      if (arr === undefined) arr = Array(9).fill(InitBoardValue);
+      bdArray = arr;
     },
     build: function() {
       $('div#ticboard').html('');
-      for (var i = 0; i < _bdArray.length; ++i) {
+      for (var i = 0; i < bdArray.length; ++i) {
         $('div#ticboard').append($('<div>', {'class': 'cell'}));
       }
       $('div#ticboard').append($('<div>').css({'clear': 'both'}));
     },
     update: function() {
-      _bdArray.forEach(function(val, index) {
+      bdArray.forEach(function(val, index) {
         if (InitBoardValue !== val) $('div.cell').eq(index).html(val);
       });
     },
     positions: function() {
-      return _bdArray.filter(function(val) {
+      return bdArray.filter(function(val) {
         return InitBoardValue === val;
       });
     },
     taken: function(place) {
       if (place === undefined) {
-        if (_bdArray.every(function(val) {
+        if (bdArray.every(function(val) {
           return val !== InitBoardValue;
         })) {
           console.log('it\'s a tie.');
@@ -61,15 +61,15 @@ var Board = function() {
         }
         return false;
       }
-      if (_bdArray[place] === undefined) return true; // index out of range
-      return _bdArray[place] !== InitBoardValue;
+      if (bdArray[place] === undefined) return true; // index out of range
+      return bdArray[place] !== InitBoardValue;
     },
     weigh: function(place, piece) {
       if (this.taken(place)) return -1;
       var win = [], lose = [];
       var weights = checker[place].map(function(line) {
         var cnt = _.countBy(line.map(function(val) {
-          return _bdArray[val];
+          return bdArray[val];
         }));
         var weight = 0;
         if (cnt[InitBoardValue] === 3) weight += 1;
@@ -94,7 +94,7 @@ var Board = function() {
     check: function(piece) {
       return checkarr.some(function(line) {
         if (line.every(function(val) {
-          return piece === _bdArray[val];
+          return piece === bdArray[val];
         })) {
           console.log(piece + ' wins.');
           line.forEach(function(val) {
@@ -106,7 +106,7 @@ var Board = function() {
       });
     },
     play: function(piece, place) {
-      _bdArray[place] = piece;
+      bdArray[place] = piece;
       this.update();
     }
   };
@@ -139,7 +139,7 @@ var Gamer = function(piece, board) {
 
 var Game = function() {
   var board = Board(),
-      _gamerPiece, _aiPiece,
+      gamerPiece, aiPiece,
       gamer, ai;
 
   return {
@@ -147,15 +147,15 @@ var Game = function() {
       board.init();
       board.build();
     },
-    setup: function(gamerPiece) {
-      _gamerPiece = gamerPiece;
-      _aiPiece = getOpponent(gamerPiece);
+    setup: function(piece) {
+      gamerPiece = piece;
+      aiPiece = getOpponent(piece);
 
-      gamer = Gamer(_gamerPiece, board);
-      ai = Gamer(_aiPiece, board);
+      gamer = Gamer(gamerPiece, board);
+      ai = Gamer(aiPiece, board);
     },
     start: function() {
-      if (playsFirst(_aiPiece)) ai.play();
+      if (playsFirst(aiPiece)) ai.play();
 
       var self = this;
       $('div.cell').on('click', function() {
