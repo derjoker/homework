@@ -1,31 +1,57 @@
 
+var Piece = function(piece) {
+  var _pieces = ['X', 'O'], _piece = _pieces[0];
+  if (_pieces[1] === piece) _piece = _pieces[1];
+  return {
+    get: function() {
+      return _piece;
+    },
+    opponent: function() {
+      return _pieces[0] === _piece ? _pieces[1] : _pieces[0];
+    }
+  };
+};
+
 var Board = function() {
-  var board, InitBoardValue = 0;
+  var _board, InitBoardValue = 0;
   var checkarr = [
     [0,1,2], [3,4,5], [6,7,8],
     [0,3,6], [1,4,7], [2,5,8],
     [0,4,8], [2,4,6]
   ];
+  var checker = checkarr.reduce(function(prev, curr) {
+    curr.forEach(function(val) {
+      if (prev.hasOwnProperty(val)) prev[val].push(curr);
+      else prev[val] = [curr];
+    });
+    return prev;
+  }, {});
 
   return {
-    init: function() {
-      board = Array(9).fill(InitBoardValue);
+    init: function(board) {
+      if (board === undefined || !Array.isArray(board)) _board = Array(9).fill(InitBoardValue);
+      else _board = _.clone(board);
     },
     build: function() {
       $('div#ticboard').html('');
-      for (var i = 0; i < board.length; ++i) {
+      for (var i = 0; i < _board.length; ++i) {
         $('div#ticboard').append($('<div>', {'class': 'cell'}));
       }
       $('div#ticboard').append($('<div>').css({'clear': 'both'}));
     },
     update: function() {
-      board.forEach(function(val, index) {
+      _board.forEach(function(val, index) {
         if (InitBoardValue !== val) $('div.cell').eq(index).html(val);
+      });
+    },
+    positions: function() {
+      return _board.filter(function(val) {
+        return InitBoardValue === val;
       });
     },
     taken: function(place) {
       if (place === undefined) {
-        if (board.every(function(val) {
+        if (_board.every(function(val) {
           return val !== InitBoardValue;
         })) {
           console.log('it\'s a tie.');
@@ -33,15 +59,15 @@ var Board = function() {
         }
         return false;
       }
-      if (board[place] === undefined) return true; // index out of range
-      return board[place] !== InitBoardValue;
+      if (_board[place] === undefined) return true; // index out of range
+      return _board[place] !== InitBoardValue;
     },
     weigh: function(place, piece) {
       if (this.taken(place)) return -1;
-      return checkarr.reduce(function(prev, curr) {
-        if (curr.indexOf(place) < 0) return prev;
-        var cnt = _.countBy(curr.map(function(val) {
-          return board[val];
+      var win = [], lose = [];
+      var weights = checker[place].map(function(line) {
+        var cnt = _.countBy(line.map(function(val) {
+          return _board[val];
         }));
         var weight = 0;
         if (cnt[InitBoardValue] === 3) weight += 1;
@@ -55,13 +81,18 @@ var Board = function() {
           } else weight += 50; // otherwise lose
         }
         // console.log(cnt, weight);
-        return prev + weight;
-      }, 0);
+        return weight;
+      });
+      return weights.reduce(function(a, b) {return a+b;});
+    },
+    rehearse: function(piece, depth) {
+      if (piece === undefined) return this.positions();
+      if (depth === undefined) depth = 0;
     },
     check: function(piece) {
       return checkarr.some(function(line) {
         if (line.every(function(val) {
-          return piece === board[val];
+          return piece === _board[val];
         })) {
           console.log(piece + ' wins.');
           line.forEach(function(val) {
@@ -73,7 +104,7 @@ var Board = function() {
       });
     },
     play: function(piece, place) {
-      board[place] = piece;
+      _board[place] = piece;
       this.update();
     }
   };
@@ -82,12 +113,15 @@ var Board = function() {
 var Gamer = function(piece, board) {
   return {
     play: function(place) {
+      var weights = _.range(9).map(function(val) {
+        return board.weigh(val, piece);
+      });
+      console.log(weights);
+
       if (place === undefined) {
         // AI
         var place;
-        var weights = _.range(9).map(function(val) {
-          return board.weigh(val, piece);
-        });
+
         var max = _.max(weights)
 
         place = _.sample(weights.reduce(function(prev, curr, index) {
@@ -113,8 +147,9 @@ var Game = function() {
       board.build();
     },
     setup: function(gamerPiece) {
-      _gamerPiece = gamerPiece;
-      _aiPiece = gamerPiece === pieces[0] ? pieces[1] : pieces[0];
+      var piece = Piece(gamerPiece);
+      _gamerPiece = piece.get();
+      _aiPiece = piece.opponent();
 
       gamer = Gamer(_gamerPiece, board);
       ai = Gamer(_aiPiece, board);
