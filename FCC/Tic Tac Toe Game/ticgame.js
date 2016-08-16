@@ -10,7 +10,7 @@ var playsFirst = function(piece) {
   return Pieces[0] === piece;
 };
 
-var InitBoardValue = 0;
+var InitBoardValue = '';
 
 var checkarr = [
   [0,1,2], [3,4,5], [6,7,8],
@@ -26,126 +26,162 @@ var checker = checkarr.reduce(function(prev, curr) {
   return prev;
 }, {});
 
-var Board = function() {
-  var bdArray;
+var Weight = {
+  'win': 100, 'tbd': 1
+};
 
+var Board = function(arr) {
+  var array = arr ? _.clone(arr) : Array(9).fill(InitBoardValue);
   return {
-    init: function(arr) {
-      if (arr === undefined) arr = Array(9).fill(InitBoardValue);
-      bdArray = arr;
+    init: function() {
+      array = Array(9).fill(InitBoardValue);
     },
-    build: function() {
-      $('div#ticboard').html('');
-      for (var i = 0; i < bdArray.length; ++i) {
-        $('div#ticboard').append($('<div>', {'class': 'cell'}));
-      }
-      $('div#ticboard').append($('<div>').css({'clear': 'both'}));
+    get: function() {
+      return array;
     },
-    update: function() {
-      bdArray.forEach(function(val, index) {
-        if (InitBoardValue !== val) $('div.cell').eq(index).html(val);
-      });
+    clone: function() {
+      return Board(array);
+    },
+    isEmpty: function(position) {
+      return InitBoardValue === array[position];
     },
     positions: function() {
-      return bdArray.filter(function(val) {
-        return InitBoardValue === val;
+      return _.range(array.length).filter((position) => {
+        return this.isEmpty(position);
       });
     },
-    taken: function(place) {
-      if (place === undefined) {
-        if (bdArray.every(function(val) {
-          return val !== InitBoardValue;
-        })) {
-          console.log('it\'s a tie.');
-          return true;
-        }
-        return false;
-      }
-      if (bdArray[place] === undefined) return true; // index out of range
-      return bdArray[place] !== InitBoardValue;
-    },
-    weigh: function(place, piece) {
-      if (this.taken(place)) return -1;
-      var win = [], lose = [];
-      var weights = checker[place].map(function(line) {
-        var cnt = _.countBy(line.map(function(val) {
-          return bdArray[val];
-        }));
-        var weight = 0;
-        if (cnt[InitBoardValue] === 3) weight += 1;
-        if (cnt[InitBoardValue] === 2) {
-          if (cnt[piece]) weight += 2;
-          else weight += 1;
-        }
-        if (cnt[InitBoardValue] === 1) {
-          if (cnt[piece]) {
-            if (cnt[piece] == 2) weight += 100; // win
-          } else weight += 50; // otherwise lose
-        }
-        // console.log(cnt, weight);
-        return weight;
+    rows: function() {
+      return checkarr.filter(function(row) {
+        var piece = array[row[0]];
+        if (piece === InitBoardValue) return false;
+        return row.every(function(val) {
+          return piece === array[val];
+        });
       });
-      return weights.reduce(function(a, b) {return a+b;});
     },
-    rehearse: function(piece, depth) {
-      if (piece === undefined) return this.positions();
-      if (depth === undefined) depth = 0;
-    },
-    check: function(piece) {
-      return checkarr.some(function(line) {
-        if (line.every(function(val) {
-          return piece === bdArray[val];
-        })) {
-          console.log(piece + ' wins.');
-          line.forEach(function(val) {
-            $('div.cell').eq(val).addClass('highlight');
+    towin: function(piece, position) {
+      if (this.isEmpty(position)) {
+        var clone = _.clone(array);
+        clone[position] = piece;
+        return checker[position].some(function(row) {
+          return row.every(function(pos) {
+            return piece === clone[pos];
           });
-          return true;
-        }
-        return false;
-      });
+        });
+      }
+      return false;
     },
-    play: function(piece, place) {
-      bdArray[place] = piece;
-      this.update();
+    over: function() {
+      if (this.rows().length > 0) return true;
+      if (this.positions().length === 0) return true;
+      return false;
+    },
+    move: function(piece, position) {
+      if (this.isEmpty(position)) {
+        array[position] = piece;
+        return true;
+      }
+      return false;
     }
   };
 };
 
+var Grid = function() {
+  return {
+    build: function() {
+      $('div#ticboard').html('');
+      for (var i = 0; i < 9; ++i) {
+        $('div#ticboard').append($('<div>', {'class': 'cell'}));
+      }
+      $('div#ticboard').append($('<div>').css({'clear': 'both'}));
+    },
+    update: function(board) {
+      console.log(board.get());
+      board.get().forEach(function(val, index) {
+        $('div.cell').eq(index).html(val);
+      });
+    }
+  };
+};
+
+var Node = function(position, weight, nodes) {
+  this.position = position;
+  this.weight = weight;
+  this.children = nodes ? _.clone(nodes) : [];
+};
+
+var maximize = function(board, piece) {
+  var positions = board.positions(),
+      weight = Weight['tbd'];
+  var tmp = positions.filter(function(pos) {
+    return board.towin(piece, pos);
+  });
+  if (tmp.length > 0) {
+    positions = tmp;
+    weight = Weight['win'];
+  }
+  return positions.map(function(pos) {
+    return new Node(pos, weight);
+  });
+};
+
+var minimize = function(board, piece) {
+  return maximize(board, piece).map(function(node) {
+    node.weight = -node.weight;
+    return node;
+  });
+};
+
+var BoardTree = function(board, piece, depth, maxmin) {
+  var depth = depth === undefined ? 1 : depth;
+  var maxmin = maxmin === undefined ? maximize : maxmin;
+
+  if (board.over() || depth < 1) return [];
+
+  var ret = maxmin(board, piece);
+
+  if (depth === 1) return ret;
+
+  var nextmaxmin = maxmin === maximize ? minimize : maximize;
+  var opponent = getOpponent(piece);
+  ret.map(function(node) {
+    var clone = board.clone();
+    clone.move(piece, node.position);
+    var bt = BoardTree(clone, opponent, depth - 1, nextmaxmin);
+    if (bt.length > 0) {
+      node.weight = nextmaxmin === maximize ? _.max(bt, 'weight').weight : _.min(bt, 'weight').weight;
+    }
+    return node;
+  });
+
+  return ret;
+};
+
 var Gamer = function(piece, board) {
   return {
-    play: function(place) {
-      var weights = _.range(9).map(function(val) {
-        return board.weigh(val, piece);
-      });
-      console.log(weights);
-
-      if (place === undefined) {
-        // AI
-        var place;
-
-        var max = _.max(weights)
-
-        place = _.sample(weights.reduce(function(prev, curr, index) {
-          if (max === curr) prev.push(index);
-          return prev;
-        }, []));
-        if (weights[place] !== _.max(weights)) console.log('Error!');
+    play: function(position) {
+      if (position === undefined) {
+        var bt = BoardTree(board, piece, 9);
+        var max = _.max(bt, 'weight').weight;
+        var position = _.sample(
+          _.pluck(_.where(bt, {weight: max}), 'position')
+        );
       }
-      board.play(piece, place);
+      board.move(piece, position);
     }
   };
 };
 
 var Game = function() {
   var board = Board(),
+      grid = Grid(),
       gamerPiece, aiPiece,
       gamer, ai;
 
   return {
     init: function() {
       board.init();
-      board.build();
+      grid.build();
     },
     setup: function(piece) {
       gamerPiece = piece;
@@ -155,7 +191,11 @@ var Game = function() {
       ai = Gamer(aiPiece, board);
     },
     start: function() {
-      if (playsFirst(aiPiece)) ai.play();
+      console.log('start!');
+      if (playsFirst(aiPiece)) {
+        ai.play(_.sample([0,2,4,6,8]));
+        grid.update(board);
+      }
 
       var self = this;
       $('div.cell').on('click', function() {
@@ -163,18 +203,15 @@ var Game = function() {
       });
     },
     over: function() {
-      var ret = false;
-
-      if (Pieces.some(function(piece) {
-        return board.check(piece);
-      })) {
-        ret = true;
-      } else if (board.taken()) {
-        ret = true;
-      }
+      var ret = board.over();
 
       // delay 3s
       if (ret) {
+        board.rows().forEach(function(row) {
+          row.forEach(function(val) {
+            $('div.cell').eq(val).addClass('highlight');
+          });
+        });
         // deactivate click
         $('div.cell').off();
         setTimeout(() => {
@@ -186,10 +223,12 @@ var Game = function() {
       return ret;
     },
     move: function(place) {
-      if (board.taken(place)) return;
+      if (!board.isEmpty(place)) return;
       gamer.play(place);
+      grid.update(board);
       if (this.over()) return;
       ai.play();
+      grid.update(board);
       if (this.over()) return;
     }
   };
