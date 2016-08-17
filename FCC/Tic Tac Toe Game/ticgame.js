@@ -30,8 +30,8 @@ var Weight = {
   'win': 100, 'tbd': 1
 };
 
-var Board = function(arr) {
-  var array = arr ? _.clone(arr) : Array(9).fill(InitBoardValue);
+var Board = function(array) {
+  var array = array ? _.clone(array) : Array(9).fill(InitBoardValue);
   return {
     init: function() {
       array = Array(9).fill(InitBoardValue);
