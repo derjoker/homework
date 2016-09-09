@@ -1,0 +1,65 @@
+
+body {
+  background-color: dimgrey;
+  margin: 100px;
+}
+
+div#pomodoro {
+  width: 400px;
+  margin: auto;
+  text-align: center;
+  color: white;
+}
+
+h1 {
+  color: red;
+}
+
+div#setting {
+  margin: 50px;
+  font-size: 16px;
+}
+
+div#setting > div {
+  margin: 5px;
+  width: 130px;
+  /*border: thin solid;*/
+  display: inline-block;
+}
+
+span {
+  margin: 10px;
+}
+
+div#timer {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background-color: red;
+  margin: auto;
+}
+
+div#mask {
+  width: 300px;
+  height: 0px;
+  background-color: dimgrey;
+}
+
+div.clock {
+  position: relative;
+  left: -8px;
+  top: -8px;
+  width: 310px;
+  height: 310px;
+  border: 3px red solid;
+  border-radius: 50%;
+}
+
+span.adjust {
+  font-size: 150%;
+}
+
+span.adjust,
+div#timer {
+  cursor: pointer;
+}
