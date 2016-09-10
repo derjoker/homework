@@ -41,7 +41,7 @@ div#timer {
 
 div#mask {
   width: 300px;
-  height: 0px;
+  height: 100%;
   background-color: dimgrey;
 }
 
@@ -53,6 +53,12 @@ div.clock {
   height: 310px;
   border: 3px red solid;
   border-radius: 50%;
+}
+
+div.clock > div {
+  height: 50%;
+  font-size: 40px;
+  line-height: 150px;
 }
 
 span.adjust {

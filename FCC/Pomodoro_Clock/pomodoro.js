@@ -41,6 +41,7 @@ var PomoFactory = function(name, minutes) {
         if ($(this).is(':visible')) $(this).click();
       });
     }
+    $('#mask').height(seconds/delay/60*100 + '%');
     timer.text(clockformat(new Date(1970, 0, 0, 0, 0, seconds)));
   };
 
@@ -114,8 +115,8 @@ $(document).ready(function() {
     e.preventDefault();
   });
 
-  var pomobreak = PomoFactory('break', 2),
-      pomosession = PomoFactory('session', 3);
+  var pomobreak = PomoFactory('break', 5),
+      pomosession = PomoFactory('session', 25);
 
   $('div#setting').append(pomobreak.controller('Break Length'));
   $('div#setting').append(pomosession.controller('Session Length'));
