@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <script src="../dist/js/jquery-2.2.4.js"></script>
+    <script src="../dist/js/underscore.js"></script>
+    <script src="weather.js"></script>
+    <link rel="stylesheet" type="text/css" href="weather.css" />
+    <title>Local Weather</title>
+  </head>
+  <body>
+    <div id="weather-app">
+    </div>
+
+    <script type="text/template" id="weather">
+      <div class="weather">
+        <h1>Local Weather</h1>
+        <br>
+        <span><%= city %>, <%= country %></span>
+        <br>
+        <span>
+          <span class="temp"><%= temperature %></span>
+          <span>&#176;</span>
+          <span class="temp-unit"><%= unit %></span>
+        </span>
+        <br>
+        <span><%= weather %></span>
+        <br>
+        <span><img src="<%= urlicon %>"></span>
+      </div>
+    </script>
+  </body>
+</html>
