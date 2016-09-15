@@ -50,5 +50,17 @@ td > div {
   width: 190px;
   height: 190px;
   margin: 5px;
+}
+
+div.green {
+  background-color: green;
+}
+div.red {
+  background-color: red;
+}
+div.blue {
   background-color: blue;
+}
+div.yellow {
+  background-color: yellow;
 }
