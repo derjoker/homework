@@ -1,0 +1,54 @@
+
+.simon {
+  width: 400px;
+  margin: auto;
+}
+
+.board > div {
+  position: absolute;
+}
+
+.board {
+  width: 400px;
+  height: 400px;
+  background: dimgrey;
+  border-radius: 50%;
+}
+
+.outer {
+  margin: 20px;
+  padding: 0px;
+  width: 360px;
+  height: 360px;
+  background: dimgrey;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.inner {
+  margin: 104px;
+  border: 6px dimgrey solid;
+  width: 180px;
+  height: 180px;
+  background: white;
+  border-radius: 50%;
+}
+
+table {
+  position: relative;
+  left: -20px;
+  top: -20px;
+  border-spacing: 0px;
+}
+
+table, th, td {
+  border-collapse: collapse;
+  padding: 0px;
+}
+
+td > div {
+  width: 190px;
+  height: 190px;
+  margin: 5px;
+  background-color: blue;
+}
