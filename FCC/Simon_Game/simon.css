@@ -32,6 +32,7 @@
   height: 180px;
   background: white;
   border-radius: 50%;
+  text-align: center;
 }
 
 table {
@@ -62,5 +63,68 @@ div.blue {
   background-color: blue;
 }
 div.yellow {
+  background-color: yellow;
+}
+
+.title {
+  margin-top: 30px;
+  font-size: 40px;
+}
+
+.control > div {
+  display: inline-block;
+  /*border: 1px solid;*/
+}
+
+label {
+  display: inline-block;
+  font-size: 10px;
+  margin-top: 6px;
+}
+
+.count {
+  margin-left: 20px;
+  margin-right: 5px;
+  width: 50px;
+}
+
+.display {
+  height: 26px;
+  border-radius: 3px;
+  background-color: brown;
+}
+
+.start {
+  width: 36px;
+}
+
+.round {
+  width: 14px;
+  height: 14px;
+  margin: auto;
+  border: 4px brown solid;
+  border-radius: 50%;
+  background-color: red;
+}
+
+.roundred {
+  background-color: red;
+}
+
+.mode {
+  margin-right: 20px;
+  width: 36px;
+}
+
+.indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin: auto;
+  margin-bottom: 5px;
+  background: black;
+}
+
+.roundyellow {
   background-color: yellow;
 }

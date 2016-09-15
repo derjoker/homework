@@ -3,6 +3,7 @@
     <script src="../dist/js/jquery-2.2.4.js"></script>
     <script src="../dist/js/underscore.js"></script>
     <script src="simon.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="../dist/css/bootstrap.css" /> -->
     <link rel="stylesheet" type="text/css" href="simon.css" />
     <title>Simon Game</title>
   </head>
@@ -15,7 +16,27 @@
             <tr><td><div class="yellow"></div></td><td><div class="blue"></div></td></tr>
           </table>
         </div>
-        <div class="inner"></div>
+        <div class="inner">
+          <div class="title">Simon</div>
+          <div class="control">
+            <div class="count">
+              <div class="display"></div>
+              <label>COUNT</label>
+            </div>
+            <div class="start">
+              <div class="round roundred"></div>
+              <label>START</label>
+            </div>
+            <div class="mode">
+              <div class="indicator"></div>
+              <div class="round roundyellow"></div>
+              <label>STRICT</label>
+            </div>
+          </div>
+          <div class="switch">
+            <input type="checkbox" />
+          </div>
+        </div>
       </div>
       <div class="sound">
         <audio src="./sound/simonSound1.mp3"></audio>
