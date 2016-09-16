@@ -72,9 +72,11 @@ Simon.Game = function() {
       level = 1;
       round = Simon.Round(level);
     }
-    round.start().done(function() {
-      _usermode = true;
-    });
+    window.setTimeout(function() {
+      round.start().done(function() {
+        _usermode = true;
+      });
+    }, 800);
   };
 
   $('td > div').on('click', function() {
@@ -83,13 +85,18 @@ Simon.Game = function() {
       var result = round.check(index);
       Simon.Effect().click(index);
       if (result > 0) {
-        Simon.Audio().play(index);
-        if (result === level) {
-          ++level;
-          round = Simon.Round(level);
-          start();
-        }
-      } else start(true);
+        Simon.Audio().play(index).done(function() {
+          if (result === level) {
+            ++level;
+            round = Simon.Round(level);
+            start();
+          }
+        });
+      } else {
+        Simon.Audio().play(4).done(function() {
+          start(true);
+        });
+      }
     }
   });
 
