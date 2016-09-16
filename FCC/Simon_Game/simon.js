@@ -6,8 +6,8 @@ Simon.Audio = function() {
   return {
     play: function(index) {
       var dfd = $.Deferred();
-      $('audio').eq(index).on('ended', function() {
-        console.log($(this).index());
+      $('audio').eq(index).one('ended', function() {
+        console.log('play', $(this).index());
         console.log('ended');
         dfd.resolve();
       }).trigger('play');
@@ -17,8 +17,10 @@ Simon.Audio = function() {
 };
 
 Simon.Effect = function() {
+
   return {
     click: function(index) {
+      // console.log('click', index);
       return $('td > div').eq(index).fadeOut(500).fadeIn(500);
     }
   };
@@ -40,12 +42,16 @@ Simon.Round = function(level) {
 
       var i = 0;
       var iterate = function() {
-        $.when(audio.play(series[i]), effect.click(series[i])).done(function() {
-          ++i;
-          if (i < level) iterate();
-        });
+        if (i < level) {
+          console.log('i:', i);
+          $.when(audio.play(series[i]), effect.click(series[i])).done(function() {
+            ++i;
+            iterate();
+          });
+        } else dfd.resolve();
       };
       iterate();
+      return dfd.promise();
     }
   };
 };
@@ -136,8 +142,15 @@ var SimonGame = function() {
 
 $(document).ready(function() {
 
-  var round = Simon.Round(5);
-  round.start();
+  var round = Simon.Round(10);
+  // round.start();
+  round.start().done(function() {
+    console.log('it\'s your turn.');
+    round.start().done(function() {
+      console.log('new round');
+      Simon.Round(10).start();
+    });
+  });
 
   var play = function(index) {
     $('td > div').eq(index).fadeOut(function() {
