@@ -60,6 +60,26 @@ Simon.Round = function(level) {
   };
 };
 
+Simon.Level = function() {
+  return {
+    set: function(level) {
+      $('.display').text(level);
+    }
+  };
+};
+
+Simon.Mode = function() {
+  return {
+    set: function(strict) {
+      if (strict) {
+        $('.indicator').css({'background': 'red'});
+      } else {
+        $('.indicator').css({'background': 'black'});
+      }
+    }
+  };
+};
+
 Simon.Game = function() {
 
   var _strict = false, _gameon = false, _usermode = false;
@@ -103,6 +123,7 @@ Simon.Game = function() {
   return {
     setmode: function(strict) {
       _strict = strict;
+      Simon.Mode().set(strict);
     },
     start: function() {
       level = 1;
@@ -126,22 +147,21 @@ $(document).ready(function() {
   $('.switch > input').click(function() {
     if (gameon) {
       game.off();
+      gameon = false;
       strict = false;
       game.setmode(strict);
-      $('.indicator').css({'background': 'black'});
       $('.round').off('click');
     } else {
       game.on();
+      gameon = true;
       $('.roundred').on('click', game.start);
       $('.roundyellow').on('click', function() {
         if (strict) {
           strict = false;
           game.setmode(strict);
-          $('.indicator').css({'background': 'black'});
         } else {
           strict = true;
           game.setmode(strict);
-          $('.indicator').css({'background': 'red'});
         }
       });
     }
