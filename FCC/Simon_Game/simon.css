@@ -130,3 +130,11 @@ label {
 .roundyellow {
   background-color: yellow;
 }
+
+.switch {
+  margin-top: 10px;
+}
+
+.switch > button {
+  width: 40px;
+}

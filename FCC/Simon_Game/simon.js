@@ -152,14 +152,16 @@ $(document).ready(function() {
   var game = Simon.Game();
   var gameon = false, strict = false;
 
-  $('.switch > input').click(function() {
+  $('.switch > button').click(function() {
     if (gameon) {
+      $(this).text('OFF');
       game.off();
       gameon = false;
       strict = false;
       game.setmode(strict);
       $('.round').off('click');
     } else {
+      $(this).text('ON');
       game.on();
       gameon = true;
       $('.roundred').on('click', game.start);
