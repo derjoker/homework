@@ -108,6 +108,10 @@ Simon.Game = function() {
       if (result > 0) {
         Simon.Audio().play(index).done(function() {
           if (result === level) {
+            if (level > 19) {
+              level = 0;
+              alert('You win the game! (20)');
+            }
             ++level;
             round = Simon.Round(level);
             start();
