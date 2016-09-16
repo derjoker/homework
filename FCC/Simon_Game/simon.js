@@ -1,24 +1,51 @@
 
-var SimonAudio = function() {
+var Simon = Simon || {};
 
-  var dfd;
-
-  $('audio').on({
-    'playing': function() {
-      console.log('playing');
-    },
-    'ended': function() {
-      console.log($(this).index());
-      console.log('ended');
-      dfd.resolve();
-    }
-  });
+Simon.Audio = function() {
 
   return {
     play: function(index) {
-      dfd = $.Deferred();
-      $('audio').eq(index).trigger('play');
+      var dfd = $.Deferred();
+      $('audio').eq(index).on('ended', function() {
+        console.log($(this).index());
+        console.log('ended');
+        dfd.resolve();
+      }).trigger('play');
       return dfd.promise();
+    }
+  };
+};
+
+Simon.Effect = function() {
+  return {
+    click: function(index) {
+      return $('td > div').eq(index).fadeOut(500).fadeIn(500);
+    }
+  };
+};
+
+Simon.Round = function(level) {
+  var series = _.range(level).map(function() {
+    return _.random(3);
+  });
+  // series.pop();
+  // series.unshift(5);
+  console.log(series);
+  var step = 0;
+
+  return {
+    start: function() {
+      var dfd = $.Deferred();
+      var audio = Simon.Audio(), effect = Simon.Effect();
+
+      var i = 0;
+      var iterate = function() {
+        $.when(audio.play(series[i]), effect.click(series[i])).done(function() {
+          ++i;
+          if (i < level) iterate();
+        });
+      };
+      iterate();
     }
   };
 };
@@ -109,12 +136,8 @@ var SimonGame = function() {
 
 $(document).ready(function() {
 
-  var audio = SimonAudio();
-  audio.play(3).done(function() {
-    audio.play(4).done(function() {
-      audio.play(0);
-    });
-  });
+  var round = Simon.Round(5);
+  round.start();
 
   var play = function(index) {
     $('td > div').eq(index).fadeOut(function() {
