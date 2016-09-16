@@ -90,6 +90,8 @@ label {
 
 .display {
   height: 26px;
+  line-height: 26px;
+  font-size: 20px;
   border-radius: 3px;
   background-color: brown;
 }

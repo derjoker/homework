@@ -92,6 +92,7 @@ Simon.Game = function() {
       level = 1;
       round = Simon.Round(level);
     }
+    Simon.Level().set(level);
     window.setTimeout(function() {
       round.start().done(function() {
         _usermode = true;
@@ -113,6 +114,7 @@ Simon.Game = function() {
           }
         });
       } else {
+        Simon.Level().set('!!');
         Simon.Audio().play(4).done(function() {
           start(true);
         });
@@ -132,9 +134,11 @@ Simon.Game = function() {
     },
     on: function() {
       _gameon = true;
+      Simon.Level().set('--');
     },
     off: function() {
       _gameon = false;
+      Simon.Level().set('');
     }
   };
 };
