@@ -1,4 +1,28 @@
 
+var SimonAudio = function() {
+
+  var dfd;
+
+  $('audio').on({
+    'playing': function() {
+      console.log('playing');
+    },
+    'ended': function() {
+      console.log($(this).index());
+      console.log('ended');
+      dfd.resolve();
+    }
+  });
+
+  return {
+    play: function(index) {
+      dfd = $.Deferred();
+      $('audio').eq(index).trigger('play');
+      return dfd.promise();
+    }
+  };
+};
+
 var Series = function(len) {
   var series = [], step = 0;
   for (var i = 0; i < len; ++i) {
@@ -84,6 +108,13 @@ var SimonGame = function() {
 };
 
 $(document).ready(function() {
+
+  var audio = SimonAudio();
+  audio.play(3).done(function() {
+    audio.play(4).done(function() {
+      audio.play(0);
+    });
+  });
 
   var play = function(index) {
     $('td > div').eq(index).fadeOut(function() {
