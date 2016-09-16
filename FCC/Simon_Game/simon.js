@@ -52,74 +52,44 @@ Simon.Round = function(level) {
       };
       iterate();
       return dfd.promise();
-    }
-  };
-};
-
-var Series = function(len) {
-  var series = [], step = 0;
-  for (var i = 0; i < len; ++i) {
-    series.push(_.random(0,3));
-  }
-  // console.log(series);
-  return {
-    each: function(callback) {
-      series.forEach(function(num, index) {
-        window.setTimeout(callback, 1000 * index, num);
-      });
     },
     check: function(num) {
-      return series[step] === num ? ++step : 0;
+      step = series[step] === num ? ++step : 0;
+      return step;
     }
   };
 };
 
-var SimonGame = function() {
-  var _series = [], _level = 1, _strict = false;
-  var _gameon = false, _usermode = false;
+Simon.Game = function() {
 
-  var series;
+  var _strict = false, _gameon = false, _usermode = false;
 
-  var click = function(index) {
-    $('td > div').eq(index).fadeOut(function() {
-      $(this).fadeIn();
-    });
-    $('audio').eq(index).trigger('play');
-  };
+  var round, level = 1;
 
-  var newRound = function(level) {
+  var start = function(fail) {
     _usermode = false;
-    if (level) series = Series(level);
-    series.each(click);
-    window.setTimeout(function() {
+    if (fail && _strict) {
+      level = 1;
+      round = Simon.Round(level);
+    }
+    round.start().done(function() {
       _usermode = true;
-    }, 1000 * series.length);
+    });
   };
 
   $('td > div').on('click', function() {
-    if (_gameon & _usermode) {
+    if (_gameon && _usermode) {
       var index = $('td > div').index(this);
-      var result = series.check(index);
-      if (0 === result) {
-        $('td > div').eq(index).fadeOut(function() {
-          $(this).fadeIn();
-        });
-        $('audio').eq(4).trigger('play');
-        window.setTimeout(function() {
-          if (_strict) {
-            _level = 1;
-            newRound(_level);
-          } else {
-            newRound();
-          }
-        }, 2000);
-      } else {
-        click(index);
-        if (result === _level) {
-          ++_level;
-          newRound(_level);
+      var result = round.check(index);
+      Simon.Effect().click(index);
+      if (result > 0) {
+        Simon.Audio().play(index);
+        if (result === level) {
+          ++level;
+          round = Simon.Round(level);
+          start();
         }
-      }
+      } else start(true);
     }
   });
 
@@ -128,8 +98,9 @@ var SimonGame = function() {
       _strict = strict;
     },
     start: function() {
-      _level = 1;
-      newRound(_level);
+      level = 1;
+      round = Simon.Round(level);
+      start();
     },
     on: function() {
       _gameon = true;
@@ -142,24 +113,7 @@ var SimonGame = function() {
 
 $(document).ready(function() {
 
-  var round = Simon.Round(10);
-  // round.start();
-  round.start().done(function() {
-    console.log('it\'s your turn.');
-    round.start().done(function() {
-      console.log('new round');
-      Simon.Round(10).start();
-    });
-  });
-
-  var play = function(index) {
-    $('td > div').eq(index).fadeOut(function() {
-      $(this).fadeIn();
-    });
-    $('audio').eq(index).trigger('play');
-  };
-
-  var game = SimonGame();
+  var game = Simon.Game();
   var gameon = false, strict = false;
 
   $('.switch > input').click(function() {
