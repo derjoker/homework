@@ -1,0 +1,19 @@
+
+#weather-app {
+  width: 100%;
+  margin-top: 100px;
+}
+
+.weather {
+  text-align: center;
+}
+
+.weather > span {
+  line-height: 180%;
+  font-size: 26px;
+}
+
+span.temp-unit {
+  cursor: pointer;
+  color: blue;
+}
